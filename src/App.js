@@ -78,8 +78,7 @@ function App() {
   }
 
   async function saveWords() {
-    const response = await axios.post('http://localhost:3001/data', posts);
-    console.log(response.data)
+    await wordsService.postAll(posts)
   }
 
   if (i == 0) {

@@ -4,7 +4,7 @@ import MyButton from "./UI/button/MyButton";
 import MyTextarea from "./UI/textarea/MyTextarea";
 
 
-const PostForm = ({refresh, save, fetchWords, posts}) => {
+const PostForm = ({refresh, save, fetchWords, words}) => {
     const [post, setPost] = React.useState({title: ""})
     
     const addNewPost = (e) => {

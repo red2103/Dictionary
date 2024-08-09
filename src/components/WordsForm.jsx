@@ -1,10 +1,9 @@
 import React from "react";
-import MyInput from "./UI/input/MyInput";
 import MyButton from "./UI/button/MyButton";
 import MyTextarea from "./UI/textarea/MyTextarea";
 
 
-const PostForm = ({refresh, save, fetchWords, words}) => {
+const WordsForm = ({refresh, save}) => {
     const [post, setPost] = React.useState({title: ""})
     
     const addNewPost = (e) => {
@@ -34,4 +33,4 @@ const PostForm = ({refresh, save, fetchWords, words}) => {
     )
 }
 
-export default PostForm
+export default WordsForm

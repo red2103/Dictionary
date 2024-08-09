@@ -1,14 +1,14 @@
 import React from "react";
-import PostItem from "./PostItem";
+import WordsItem from "./WordsItem";
 
-const PostList = ({words, remove}) => {
+const WordsList = ({words, remove}) => {
   // console.log(words)
     return (
         <div>
           {words.length !== 0
             ?
             words.map((post) =>
-              <PostItem remove={remove} post={post} key={post.id}/>
+              <WordsItem remove={remove} post={post} key={post.id}/>
             )
             : 
             <h1 style={{textAlign: "center"}}>
@@ -19,4 +19,4 @@ const PostList = ({words, remove}) => {
     )
 }
 
-export default PostList;
+export default WordsList;

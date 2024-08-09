@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import PostList from './components/PostList';
-import PostForm from './components/PostForm';
+import WordsList from './components/WordsList';
+import WordsForm from './components/WordsForm';
 import MySelect from './components/UI/select/MySelect';
 import wordsService from './API/wordsService'
-
-import { setSelectionRange } from '@testing-library/user-event/dist/utils';
 
 
 function elicitWords(text) {
@@ -13,30 +11,7 @@ function elicitWords(text) {
 } 
 
 
-function addSentences(wordCount, sentences) {
-    const newWords = elicitWords(sentences)
-    for (const word of newWords) {
-        const index = wordCount.findIndex(obj => obj.hasOwnProperty(word));
-        if (index >= 0) {
-          wordCount[index] = {[Object.keys(wordCount[index])] : Object.values(wordCount[index])[0] +1 }
-        } else {
-          wordCount.push({[word]: 1})
-        }
-        
-    }
-    
-}   
-
-const addPost = (word, id) => {
-  return {
-    id: id,
-    title: word,
-    count: 1
-  }
-}
-
-function create_new_words(words_list, old_words) {
-  const words = old_words
+function create_new_words(words_list, words) {
   let id = Date.now()
 
   for (const word of words_list) {
@@ -44,10 +19,16 @@ function create_new_words(words_list, old_words) {
     if (wordToUpdate) {
       wordToUpdate.count += 1
     } else {
-      id +=1
-      words.push(addPost(word, id))
+      console.log(word)
+      id += 1
+      words.push({
+        id: id,
+        title: word,
+        count: 1   
+      })
     }
   }
+  console.log(words)
   return words
 }
 
@@ -57,7 +38,7 @@ let data = []
 
 
 function App() {
-  const [words, setPosts] = useState(data)
+  const [words, setWords] = useState(data)
   const [selectedSort, setSelectedSort] = useState();
 
 
@@ -65,25 +46,25 @@ function App() {
   const refreshWord = (text) => {
     const words_list = elicitWords(text)
     const new_words = create_new_words(words_list, [...words])
-    setPosts([...new_words])
+    setWords([...new_words])
   }  
 
   const removeWord = (word) => {  
-    setPosts(words.filter(p => p.id !== word.id))
+    setWords(words.filter(p => p.id !== word.id))
   }
 
   const sortWords = (sort) => {
     setSelectedSort(sort)
     if (sort == "title") {
-      setPosts([...words].sort((a, b) => a.title.localeCompare(b.title)))
+      setWords([...words].sort((a, b) => a.title.localeCompare(b.title)))
     } if (sort == "const") {
-      setPosts([...words].sort((a, b) => b.count - a.count))
+      setWords([...words].sort((a, b) => b.count - a.count))
     }
   }
 
   async function fetchWords() {
     const words = await wordsService.getAll()
-    setPosts(JSON.parse(words))
+    setWords(JSON.parse(words))
   }
 
   async function saveWords() {
@@ -99,7 +80,7 @@ function App() {
     <div className="App">
       <button onClick={fetchWords}>Restore</button>
 
-      <PostForm refresh={refreshWord} save={saveWords} words={words} fetchWords={fetchWords}/>
+      <WordsForm refresh={refreshWord} save={saveWords} words={words} fetchWords={fetchWords}/>
 
       <div>
         <MySelect
@@ -113,7 +94,7 @@ function App() {
         />
       </div>
 
-      <PostList remove={removeWord} words={words}/>      
+      <WordsList remove={removeWord} words={words}/>      
     </div>
   );
 }
